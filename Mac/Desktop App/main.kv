@@ -1,0 +1,450 @@
+# MENG Final Year project - University of Birmingham, Department of Electrical and Electronic Engineering 
+# Project Runtime:      10/2018 - TBC/2019
+# Creator:              Jordan Andrew (Kelly) Small - 1561404
+# Project Supervisor:   Robert Stone
+# Title:                Medical Emergency Response Teams (MERT) - Desktop Application
+# Summary:              Controls the Pulse simulator through bluetooth communication
+# Languages:            Python (Backend) and Kivy (Frontend)
+
+<CustButton@Button>:
+    font_size:  32
+    color:  0,  0,  0,  1
+    size:   300, 50
+    background_color:   .88, .88, .88, 1
+    
+<Widgets>:
+    lblid:              my_lablel
+    lblid2:             my_lablel_2
+    btnid:              my_btn
+    btn_pulse:          sendpulseData
+    main_status:        status_main
+    connect_btn:        connectButton
+    disconnect_btn:     disconnectButton
+    bluetooth_:         bluetooth_status
+    
+    canvas.before:
+        Color:
+            rgba: (46/255), (49/255), (49/255), 1
+        Rectangle:
+            # self here refers to the widget i.e FloatLayout
+            pos: self.pos
+            size: self.size
+
+    canvas.after:
+        Color:
+            rgba: (0/255), (204/255), (255/255), 0.4
+        Rectangle:
+            # self here refers to the widget i.e FloatLayout
+            pos: 10, 750
+            size: 1315, 55
+
+    Label:
+        font_size:  40
+        text: "STATUS:"
+        pos: 50, 730
+        halign:'left'
+        valign:'middle'
+
+    Label:
+        id: status_main
+        font_size:  30
+        text: ""
+        pos: 385, 726
+        
+    Image:
+        source: 'icons8-heart-with-pulse-filled-100 (2).png'
+        size: 400, 400
+        pos: -130, 740
+
+
+    Label:
+        font_size:  60
+        text: "Pulse Simulator BLE | "
+        pos: 400, 890
+
+    Label:
+        font_size:  45
+        text:       "Slider"
+        pos:        53, 343 + 260
+
+    Label:
+        font_size:  45
+        text:       "Value:"
+        pos:        50, 295 + 260
+
+    Label:
+        id: my_lablel
+        font_size:  105
+        text: "40 BPM"
+        pos: 360, 320 + 260
+        color: (102/255), (204/255), (255/255), 0.8
+
+        # 
+
+    Label:
+        font_size:  45
+        text:       "Current"
+        pos:        45, 343
+
+    Label:
+        font_size:  45
+        text:       "Value:"
+        pos:        50, 295
+    
+
+    Label:
+        id: my_lablel_2
+        font_size:  250
+        text: "0 BPM"
+        pos: 665, 365
+        color: (102/255), (204/255), (255/255), 1
+
+
+    Label:
+        font_size:  60
+        text: "PULSE:"
+        pos: root.x+60, 800
+
+
+    Slider:         
+
+        #disabled: True
+        min: 40
+        max: 250
+        size: 1400, 200
+        pos:  root.x, 175
+        on_value: root.update(*args)
+
+    ToggleButton:
+
+        #disabled: True
+
+        id: my_btn
+
+        text: 'ON'
+
+        active: True
+
+        size: 170, 55
+
+        on_state: root.on_off(*args)                   # This extracts the value from the python code 
+    
+        pos:  root.x + 220 , 821
+
+    CustButton:
+        id:     connectButton
+        text:   "CONNNECT"
+        on_release: root.connectbtn_clk()
+        pos:    root.x + 399, 821
+        size: 710,55
+        color: (231/255), (176/255), (8/255), 1
+
+    CustButton:
+        id:     disconnectButton
+        text:   "DISCONNECT"
+        on_release: root.disconnectbtn_clk()
+        pos:    root.x + 1118, 821
+        size: 208,55
+        color: (255/255), (0/255), (0/255), 1
+
+    Button:
+        text: "E1"
+        pos:  root.x + 1335, 821
+        size: 55,55
+        on_release: root.btn()
+
+    Button:
+        text: "E2"
+        pos:  root.x + 1335, 750
+        size: 55,55
+        on_release: root.btn2()
+
+    CustButton:
+        id:     sendpulseData
+        text:   "SEND PULSE"
+        font_size:  50
+        on_release: root.send_pulse_data()
+        size: 1380, 200
+        pos:    root.x + 10, 10
+        color: (246/255), (246/255), (246/255), 1
+
+    Label:
+        id:         bluetooth_status
+        text:       "Bluetooth (Disconnected)"
+        font_size:  30
+        pos:        860, 877
+
+
+<EvaluationWindow>:
+    current_hr:         currentHR
+    increment:          next
+    deincrement:        prev
+    time_id:            time
+    start_id:           start
+    end_id:             end
+    evaluation_status:  evaluationStatus
+    it:                 iterations
+
+
+    # Restart Iterations
+    Button:
+        text: "R"
+        size_hint: 0.03, 0.045
+        pos_hint: {"right":1, "top":0.99}
+        on_release: root.restart()
+
+
+    # Perception Testing 
+    Label:
+        text: "BPM Testing"
+        size_hint: 0.16, 0.1
+        pos_hint: {"x":0, "top":1}
+
+    Label:
+        text: "Status:"
+        size_hint: 1, 0.1
+        pos_hint: {"x":0.076, "top":1}
+
+    Label:
+        id:     evaluationStatus  
+        text:   "Idle"
+        size_hint: 0.15, 0.1
+        pos_hint: {"right":0.8, "top":1}
+        color: (0/255), (94/255), (155/255), 1
+
+    Label:
+        id:     currentHR
+        text:   "Current HR:"                         # Add the value next to this in the python code
+        font_size:  60
+        size_hint: 0.26, 0.09
+        pos_hint: {"x":0.002, "top":0.9}
+
+    Label:
+        id:     currentHR
+        text:   "60"                                 # Value of BPM to be Tested
+        font_size:  60
+        size_hint: 0.85, 0.09
+        pos_hint: {"x":0.012, "top":0.9}
+        color: (19/255), (206/255), (236/255), 1
+
+    
+
+    Label:
+        text:   "Next:   "                         # Add the value next to this in the python code
+        font_size:  30
+        size_hint: 1, 0.09
+        pos_hint: {"x":.075, "top":0.885}
+
+    Label:  # Value of the next value ot be tested
+        id:     next
+        text:   "70"                         # Add the value next to this in the python code
+        font_size:  30
+        size_hint: 1, 0.09
+        pos_hint: {"x":.25, "top":0.885}
+        color: (19/255), (206/255), (236/255), 1
+
+    Label:
+        text:   "Previous:   "                         # Add the value next to this in the python code
+        font_size:  30
+        size_hint: 1, 0.09
+        pos_hint: {"x":.0969, "top":0.92}
+
+    Label:  # Value of the previous value
+        id:     prev
+        text:   "N/A"                         # Add the value next to this in the python code
+        font_size:  30
+        size_hint: 1, 0.09
+        pos_hint: {"x":.25, "top":0.92}
+        color: (19/255), (206/255), (236/255), 1
+    
+    Label:
+        text: "Time Remaining:"                         # Add the value next to this in the python code
+        font_size:  60
+        size_hint: 0.09, 0.1
+        pos_hint: {"x":.15, "top":0.8}
+
+    Label:
+        id: time
+        text: "..."        # Time
+        font_size:  60
+        size_hint: 0.09, 0.1
+        pos_hint: {"x":.4, "top":0.8}
+        color: (231/255), (176/255), (8/255), 1
+
+    Label:
+        text: "Iterations:"                         # Add the value next to this in the python code
+        font_size:  60
+        size_hint: 0.09, 0.1
+        pos_hint: {"x":.6, "top":0.8}
+
+    Label:
+        id: iterations
+        text: "0"                         # Add the value next to this in the python code
+        font_size:  60
+        size_hint: 0.1, 0.1
+        pos_hint: {"x":.8, "top":0.8}
+        color: (231/255), (176/255), (8/255), 1
+
+    Button:
+        id: start
+        text: "Start"
+        size_hint: 0.25, 0.2
+        pos_hint: {"x":0, "top":0.68}
+        on_release: root.start_button()
+
+    Button:
+        id: end
+        text: "End"
+        size_hint: 0.25, 0.2
+        pos_hint: {"x":.25, "top":0.68}
+        on_release: root.end_button()
+
+    Button:
+        text: "Previous"
+        size_hint: 0.25, 0.2
+        pos_hint: {"x":.5, "top":0.68}
+        on_release: root.prev_value_evaluation()
+
+    Button:
+        text: "Next"
+        size_hint: 0.25, 0.2
+        pos_hint: {"x":.75, "top":0.68}
+        on_release: root.next_value_evaluation()
+
+    # JND Testing
+
+    Label:
+        text: "JND Testing"
+        size_hint: 0.16, 0.1
+        pos_hint: {"x":0, "top":0.47}
+
+    Label:
+        font_size:  40
+        text: "Start Displacement:"
+        size_hint: 0.2, 0.1
+        pos_hint: {"x":0.055, "top":0.38}
+
+    Label:
+        font_size:  40
+        text: "Next Displacement:"
+        size_hint: 0.2, 0.1
+        pos_hint: {"x":0.5, "top":0.38}
+
+    Label:
+        font_size:  40
+        text: "Displacement Rate:"
+        size_hint: 0.2, 0.1
+        pos_hint: {"x":0.052, "top":0.3}
+
+    Label:
+        font_size:  40
+        text: "Iterations:"
+        size_hint: 0.2, 0.1
+        pos_hint: {"x":0.431, "top":0.3}
+
+
+    Label:
+        font_size:  40
+        text: "JND Captured:"
+        size_hint: 0.2, 0.1
+        pos_hint: {"x":0.0178, "top":0.22}
+    
+    Button:
+        text: "Begin Test"
+        size_hint: 0.25, 0.1
+        pos_hint: {"x":0, "top":0.1}
+    
+    Button:
+        text: "End"
+        size_hint: 0.25, 0.1
+        pos_hint: {"x":0.25, "top":0.1}
+
+    Button:
+        text: "Capture"
+        size_hint: 0.5, 0.1
+        pos_hint: {"x":0.5, "top":0.1}
+    
+
+# <IncrediblyCrudeClock@Label>:
+#     text: str(round(self.a, 1))
+
+<SecondEvaluationWindow>:
+    test_status_lbl_JND:        testStatus 
+    test_iterations_lbl_JND:    iterationsJND
+    lower_btn_JND:              LowerBPM
+    higher_btn_JND:             HigherBPM
+    start_btn_JND:              startJND
+    end_btn_JND:                endJND
+    result_btn_JND:             resultJND
+    
+
+    
+    Label:
+        # text:       "Status:"
+        # font_size:  60
+        # size_hint:  0.1, 0.1     
+        # pos_hint:   {"x":0.04,"top":0.95}
+
+    Label:
+        id:     testStatus      # Running, Stopped etc
+        text:       "Which is faster?"
+        font_size:  60
+        size_hint:  0.1, 0.1     
+        pos_hint:   {"x":0.15,"top":0.95}
+
+    Label:
+        text:   "Iterations:"   # Iterations out of etc.
+        font_size:  60
+        size_hint:  0.1, 0.1     
+        pos_hint:   {"x":0.62,"top":0.95}
+
+    Label:
+        id:     iterationsJND
+        text:   "_ /_"   # Iterations out of etc.
+        font_size:  60
+        size_hint:  0.1, 0.1     
+        pos_hint:   {"x":0.85,"top":0.95}
+
+    Button:
+        id:         LowerBPM
+        text:       "FIRST"
+        font_size:  120
+        size_hint:  0.5, 0.6
+        pos_hint:   {"x":0,"top":0.8}
+        on_release: root.first_btn()
+        
+    Button:
+        id:         HigherBPM
+        text:       "SECOND"
+        font_size:  120
+        size_hint:  0.5, 0.6
+        pos_hint:   {"x":0.5,"top":0.8}
+        on_release: root.second_btn()
+    
+    Button:
+        id:         startJND
+        text:       "START"
+        font_size:  40
+        size_hint:  0.5, 0.2
+        pos_hint:   {"x":0.0,"top":0.2}
+        on_release: root.start_test_btn()
+
+    Button:
+        id:         endJND
+        text:       "END"
+        font_size:  40
+        size_hint:  0.25, 0.2
+        pos_hint:   {"x":0.5,"top":0.2}
+        on_release: root.end_test_btn()
+
+    Button:
+        id:         resultJND
+        text:       "RESULT"
+        font_size:  40
+        size_hint:  0.25, 0.2
+        pos_hint:   {"x":0.75,"top":0.2}
+        on_release: root.extract_result()
+
+
+
+
