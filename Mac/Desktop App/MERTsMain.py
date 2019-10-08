@@ -7,7 +7,7 @@
 # Summary:              Controls the Pulse simulator through bluetooth communication
 # Languages:            Python (Backend) and Kivy (Frontend)
 
-# This is a test for the test branch within github
+# This is a test for the test branch within github\2
 
 # Libraries
 import serial           # Bluetooth serial properties 
