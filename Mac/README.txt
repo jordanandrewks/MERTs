@@ -1,5 +1,5 @@
 MENG Final Year project - University of Birmingham, Department of Electrical and Electronic Engineering 
-Project Runtime:      10/2018 - TBC/2019
+Project Runtime:      10/2018 - 08/2019
 Creator/Developer:    Jordan Andrew (Kelly) Small - 1561404
 Project Supervisor:   Robert Stone
 Title:                Medical Emergency Response Teams (MERT) - Desktop Application & Arduino script
